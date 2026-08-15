@@ -1,0 +1,22 @@
+# Compiled output & build directories
+**/target/
+**/dist/
+**/build/
+**/node_modules/
+
+# Logs & temp files
+*.log
+*.tmp
+
+# IDE / Editor config
+.vscode/
+.idea/
+*.iml
+*.classpath
+*.project
+*.settings/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+scratch/
