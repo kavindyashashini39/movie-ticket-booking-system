@@ -25,83 +25,117 @@
 ---
  
  
-🎬 Distributed Cinema Booking Microservices Architecture
+# 🎬 Distributed Cinema Booking Microservices Architecture
 
-A production-grade, distributed microservices architecture built with Spring Boot 3.3.5 (Java 21), Spring Cloud API Gateway, MongoDB Atlas / MongoDB Docker Container, Swagger UI / OpenAPI 3.0, and a React + Tailwind CSS client application.
+> A production-grade, distributed microservices architecture for an online cinema ticket booking platform.
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.3.5-brightgreen?logo=springboot" />
+  <img src="https://img.shields.io/badge/Java-21-orange?logo=openjdk" />
+  <img src="https://img.shields.io/badge/Spring%20Cloud-API%20Gateway-blue?logo=spring" />
+  <img src="https://img.shields.io/badge/MongoDB-Atlas%20%7C%20Docker-47A248?logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/API%20Docs-Swagger%20%2F%20OpenAPI%203.0-85EA2D?logo=swagger&logoColor=black" />
+  <img src="https://img.shields.io/badge/Frontend-React%20%2B%20Tailwind-06B6D4?logo=react&logoColor=white" />
+</p>
 
-╔═══════════════════════════════════╗
-                        ║      🖥️  REACT + TAILWIND UI       ║
-                        ║         Port 3000 / Web            ║
-                        ╚═════════════════╤═══════════════════╝
-                                          │
-                        Header: X-Client-Secret: CinemaClientSecret2026!
-                        Header: Authorization: Bearer <JWT>
-                                          │
-                                          ▼
-                        ╔═══════════════════════════════════╗
-                        ║     🚪  CENTRAL API GATEWAY        ║
-                        ║           Port 8080                ║
-                        ║     Unified Swagger UI Portal      ║
-                        ╚═════════════════╤═══════════════════╝
-                                          │ Injects: X-API-KEY: SecretApiKey12345
-        ┌─────────────────┬───────────────┼───────────────┬─────────────────┐
-        ▼                 ▼               ▼               ▼                 ▼
-  ┌───────────┐    ┌───────────┐   ┌───────────┐   ┌───────────┐    ┌───────────┐
-  │🔐  AUTH   │    │🎬  MOVIE  │   │🎟️ BOOKING │   │📩 NOTIFY  │    │💳 PAYMENT │
-  │  SERVICE  │    │  SERVICE  │   │  SERVICE  │   │  SERVICE  │    │  SERVICE  │
-  │ Port 8081 │    │ Port 8082 │   │ Port 8083 │   │ Port 8084 │    │ Port 8085 │
-  └─────┬─────┘    └─────┬─────┘   └─────┬─────┘   └─────┬─────┘    └─────┬─────┘
-        ▼                ▼               ▼               ▼                ▼
-  ┌───────────┐    ┌───────────┐   ┌───────────┐   ┌───────────┐    ┌───────────┐
-  │  auth_db  │    │ movie_db  │   │booking_db │   │notify_db  │    │ payment_db│
-  │ (MongoDB) │    │ (MongoDB) │   │ (MongoDB) │   │ (MongoDB) │    │ (MongoDB) │
-  └───────────┘    └───────────┘   └───────────┘   └───────────┘    └───────────┘
-```
+## 📖 Overview
+
+This project is a **distributed, production-grade microservices system** built to power an end-to-end online cinema ticket booking platform. Each core domain — authentication, movies, bookings, notifications, and payments — is implemented as an **independent Spring Boot service**, all fronted by a centralized **Spring Cloud API Gateway** and backed by isolated **MongoDB** databases.
+
+### 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Spring Boot 3.3.5 (Java 21) |
+| **API Gateway** | Spring Cloud Gateway |
+| **Database** | MongoDB Atlas / MongoDB (Docker Container) |
+| **API Documentation** | Swagger UI / OpenAPI 3.0 |
+| **Frontend** | React + Tailwind CSS |
 
 ---
 
-🔒 Security Architecture & Headers
 
-The system implements a dual-layer security perimeter:
+## 🏛️ System Architecture
 
- 1. Client-to-Gateway Secret Key Security
-All client HTTP requests communicating with the Central API Gateway (Port 8080) must supply the client secret header:
+This project follows a **microservices architecture**, orchestrated through a central API Gateway.
+
+### 1️⃣ Client Layer
+- **React + Tailwind UI** — runs on `Port 3000`
+- Sends every request to the API Gateway with:
+  - Header: `X-Client-Secret: CinemaClientSecret2026!`
+  - Header: `Authorization: Bearer <JWT>`
+
+### 2️⃣ API Gateway
+- **Central API Gateway** — runs on `Port 8080`
+- Acts as the single entry point for the frontend (Unified Swagger UI Portal included)
+- Validates the client secret & JWT, then forwards requests to the relevant microservice
+- Injects an internal header before forwarding: `X-API-KEY: SecretApiKey12345`
+
+### 3️⃣ Microservices
+| Service | Port | Responsibility |
+|---|---|---|
+| 🔐 **auth-service** | `8081` | Handles login, registration, JWT issuing |
+| 🎬 **movie-service** | `8082` | Manages movies, showtimes, listings |
+| 🎟️ **booking-service** | `8083` | Handles seat selection & ticket bookings |
+| 📩 **notification-service** | `8084` | Sends booking confirmations / alerts |
+| 💳 **payment-service** | `8085` | Processes payments for bookings |
+
+### 4️⃣ Database Layer
+Each microservice owns its **own isolated MongoDB database** (Database-per-Service pattern):
+- `auth_db` — used by auth-service
+- `movie_db` — used by movie-service
+- `booking_db` — used by booking-service
+- `notification_db` — used by notification-service
+- `payment_db` — used by payment-service
+
+### 🔑 Key Design Points
+- **Single entry point:** all client traffic goes only through the API Gateway
+- **Security:** double-layer verification — client secret + JWT (frontend↔gateway) and API key (gateway↔services)
+- **Loose coupling:** each service has its own database, so services can scale/deploy independently
+- **Documentation:** unified Swagger UI accessible via the gateway for all service APIs
+---
+
+## 🔒 Security Architecture & Headers
+
+The system implements a **dual-layer security perimeter**:
+
+### 1. Client-to-Gateway Secret Key Security
+All client HTTP requests communicating with the Central API Gateway (`Port 8080`) must supply the client secret header:
+
 ```http
 X-Client-Secret: CinemaClientSecret2026!
 ```
-Requests missing or having an invalid client secret are immediately rejected with HTTP `401 Unauthorized`.*
 
-2. User Authentication & Authorization (OAuth2 / JWT)
-Protected endpoints (such as ticket booking, viewing payment history, managing movies, and dispatching notifications) require a valid Bearer JWT token obtained from `/auth/login` or `/auth/register`:
+> Requests missing or having an invalid client secret are immediately rejected with HTTP `401 Unauthorized`.
+
+### 2. User Authentication & Authorization (OAuth2 / JWT)
+Protected endpoints (such as ticket booking, viewing payment history, managing movies, and dispatching notifications) require a valid **Bearer JWT token** obtained from `/auth/login` or `/auth/register`:
+
 ```http
 Authorization: Bearer <JWT_TOKEN>
 ```
 
- 3. Internal Gateway-to-Microservice Security
-Direct access to internal microservices on ports 8081–8085 is strictly guarded. The API Gateway automatically attaches an internal security signature:
+### 3. Internal Gateway-to-Microservice Security
+Direct access to internal microservices on ports `8081–8085` is strictly guarded. The API Gateway automatically attaches an internal security signature:
+
 ```http
 X-API-KEY: SecretApiKey12345
 ```
 
 ---
 
- 📖 Interactive Swagger UI & API Documentation
+## 📖 Interactive Swagger UI & API Documentation
 
- Central Aggregated Swagger UI Hub
-Open [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)** in your browser.
-Use the Select a definition dropdown in the top-right corner to switch between all services:
+### Central Aggregated Swagger UI Hub
+Open **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)** in your browser.
+
+Use the **Select a definition** dropdown in the top-right corner to switch between all services:
 
 | Definition in Dropdown | Target Microservice | Direct Swagger UI URL |
 | :--- | :--- | :--- |
 | 1. Central API Gateway | Gateway Routes & Proxy | `http://localhost:8080/swagger-ui.html` |
-| 2. Auth Service (Port 8081) | User Registration, Login, JWT | `http://localhost:8081/swagger-ui.html` |
-| 3. Movie Service (Port 8082)| Movie Catalog CRUD & Trailers | `http://localhost:8082/swagger-ui.html` |
-| 4. Booking Service (Port 8083) | Ticket Reservations & Orders | `http://localhost:8083/swagger-ui.html` |
-| 5. Notification Service (Port 8084) | Email & SMS Notifications | `http://localhost:8084/swagger-ui.html` |
-| 6. Payment Service (Port 8085) | Payment Gateway & PDF Bills | `http://localhost:8085/swagger-ui.html` |
+| 2. Auth Service (Port 8081) | User Registration, Login, JWT |
 
----
  👥 Microservices Work Division Matrix
 
 | Student / Module | Microservice API | Port | MongoDB Database | Key Endpoints |
