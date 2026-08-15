@@ -2,11 +2,9 @@
 
 A production-grade, distributed microservices architecture built with Spring Boot 3.3.5 (Java 21), Spring Cloud API Gateway, MongoDB Atlas / MongoDB Docker Container, Swagger UI / OpenAPI 3.0, and a React + Tailwind CSS client application.
 
----
 
  🏛️ System Architecture
 
-```
                                  ┌─────────────────────────────────┐
                                  │       React + Tailwind UI       │
                                  │        (Port 3000 / Web)        │
