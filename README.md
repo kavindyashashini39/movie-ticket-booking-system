@@ -1,4 +1,31 @@
- 🎬 Distributed Cinema Booking Microservices Architecture
+# 🎬 Movie Ticket Booking System
+
+<div align="center">
+
+![Movie Ticket Booking](https://img.shields.io/badge/Project-Movie%20Ticket%20Booking-blueviolet?style=for-the-badge&logo=googlemovies)
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
+![Architecture](https://img.shields.io/badge/Architecture-Microservices-orange?style=for-the-badge)
+
+### 🎟️ *"Book Your Seat, Skip the Queue"* 🎟️
+
+</div>
+
+---
+
+## 👥 Team Members
+
+| Index Number | Role |
+|:---|:---|
+| `ITBNM-2313-0027` | Contributor |
+| `ITBNM-2313-0039` | Contributor |
+| `ITBNM-2313-0049` | Contributor |
+| `ITBNM-2313-0007` | Contributor |
+| `ITBNM-2313-0021` | Contributor |
+
+---
+ 
+ 
+🎬 Distributed Cinema Booking Microservices Architecture
 
 A production-grade, distributed microservices architecture built with Spring Boot 3.3.5 (Java 21), Spring Cloud API Gateway, MongoDB Atlas / MongoDB Docker Container, Swagger UI / OpenAPI 3.0, and a React + Tailwind CSS client application.
 
