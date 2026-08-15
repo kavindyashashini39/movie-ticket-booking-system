@@ -16,11 +16,11 @@
 
 | Index Number | Role |
 |:---|:---|
-| `ITBNM-2313-0027` | Contributor |
-| `ITBNM-2313-0039` | Contributor |
-| `ITBNM-2313-0049` | Contributor |
-| `ITBNM-2313-0007` | Contributor |
-| `ITBNM-2313-0021` | Contributor |
+| `ITBNM-2313-0039` | Author-Service |
+| `ITBNM-2313-0027` | Movie-Service |
+| `ITBNM-2313-0007` | Booking-Service |
+| `ITBNM-2313-004` | Notification-Service |
+| `ITBNM-2313-0021` | Payment-Service |
 
 ---
  
@@ -30,35 +30,33 @@
 A production-grade, distributed microservices architecture built with Spring Boot 3.3.5 (Java 21), Spring Cloud API Gateway, MongoDB Atlas / MongoDB Docker Container, Swagger UI / OpenAPI 3.0, and a React + Tailwind CSS client application.
 
 
- 🏛️ System Architecture
-
-                                 ┌─────────────────────────────────┐
-                                 │       React + Tailwind UI       │
-                                 │        (Port 3000 / Web)        │
-                                 └────────────────┬────────────────┘
-                                                  │ 
-                                                  │ Header: X-Client-Secret: CinemaClientSecret2026!
-                                                  │ Header: Authorization: Bearer <JWT>
-                                                  ▼
-                                 ┌─────────────────────────────────┐
-                                 │       Central API Gateway       │
-                                 │           (Port 8080)           │
-                                 │    Unified Swagger UI Portal    │
-                                 └────────────────┬────────────────┘
-                                                  │ Injects Header: X-API-KEY: SecretApiKey12345
-        ┌──────────────────┬──────────────────────┼──────────────────────┬──────────────────┐
-        │                  │                      │                      │                  │
-        ▼                  ▼                      ▼                      ▼                  ▼
-┌──────────────┐   ┌──────────────┐       ┌──────────────┐       ┌──────────────┐   ┌──────────────┐
-│ auth-service │   │movie-service │       │booking-servic│       │notification- │   │payment-servic│
-│ (Port 8081)  │   │ (Port 8082)  │       │ (Port 8083)  │       │ (Port 8084)  │   │ (Port 8085)  │
-└──────┬───────┘   └──────┬───────┘       └──────┬───────┘       └──────┬───────┘   └──────┬───────┘
-       │                  │                      │                      │                  │
-       ▼                  ▼                      ▼                      ▼                  ▼
-┌──────────────┐   ┌──────────────┐       ┌──────────────┐       ┌──────────────┐   ┌──────────────┐
-│  auth_db     │   │  movie_db    │       │  booking_db  │       │notification_d│   │  payment_db  │
-│  (MongoDB)   │   │  (MongoDB)   │       │  (MongoDB)   │       │  (MongoDB)   │   │  (MongoDB)   │
-└──────────────┘   └──────────────┘       └──────────────┘       └──────────────┘   └──────────────┘
+╔═══════════════════════════════════╗
+                        ║      🖥️  REACT + TAILWIND UI       ║
+                        ║         Port 3000 / Web            ║
+                        ╚═════════════════╤═══════════════════╝
+                                          │
+                        Header: X-Client-Secret: CinemaClientSecret2026!
+                        Header: Authorization: Bearer <JWT>
+                                          │
+                                          ▼
+                        ╔═══════════════════════════════════╗
+                        ║     🚪  CENTRAL API GATEWAY        ║
+                        ║           Port 8080                ║
+                        ║     Unified Swagger UI Portal      ║
+                        ╚═════════════════╤═══════════════════╝
+                                          │ Injects: X-API-KEY: SecretApiKey12345
+        ┌─────────────────┬───────────────┼───────────────┬─────────────────┐
+        ▼                 ▼               ▼               ▼                 ▼
+  ┌───────────┐    ┌───────────┐   ┌───────────┐   ┌───────────┐    ┌───────────┐
+  │🔐  AUTH   │    │🎬  MOVIE  │   │🎟️ BOOKING │   │📩 NOTIFY  │    │💳 PAYMENT │
+  │  SERVICE  │    │  SERVICE  │   │  SERVICE  │   │  SERVICE  │    │  SERVICE  │
+  │ Port 8081 │    │ Port 8082 │   │ Port 8083 │   │ Port 8084 │    │ Port 8085 │
+  └─────┬─────┘    └─────┬─────┘   └─────┬─────┘   └─────┬─────┘    └─────┬─────┘
+        ▼                ▼               ▼               ▼                ▼
+  ┌───────────┐    ┌───────────┐   ┌───────────┐   ┌───────────┐    ┌───────────┐
+  │  auth_db  │    │ movie_db  │   │booking_db │   │notify_db  │    │ payment_db│
+  │ (MongoDB) │    │ (MongoDB) │   │ (MongoDB) │   │ (MongoDB) │    │ (MongoDB) │
+  └───────────┘    └───────────┘   └───────────┘   └───────────┘    └───────────┘
 ```
 
 ---
