@@ -43,7 +43,7 @@ A production-grade, distributed microservices architecture built with Spring Boo
 The system implements a dual-layer security perimeter:
 
  1. Client-to-Gateway Secret Key Security
-All client HTTP requests communicating with the **Central API Gateway (Port 8080)** must supply the client secret header:
+All client HTTP requests communicating with the Central API Gateway (Port 8080) must supply the client secret header:
 ```http
 X-Client-Secret: CinemaClientSecret2026!
 ```
@@ -66,8 +66,8 @@ X-API-KEY: SecretApiKey12345
  📖 Interactive Swagger UI & API Documentation
 
  Central Aggregated Swagger UI Hub
-Open **[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)** in your browser.
-Use the **Select a definition** dropdown in the top-right corner to switch between all services:
+Open [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)** in your browser.
+Use the Select a definition dropdown in the top-right corner to switch between all services:
 
 | Definition in Dropdown | Target Microservice | Direct Swagger UI URL |
 | :--- | :--- | :--- |
@@ -93,9 +93,9 @@ Use the **Select a definition** dropdown in the top-right corner to switch betwe
 
 ---
 
-## 🚀 Running with Docker Compose (Recommended)
+ 🚀 Running with Docker Compose (Recommended)
 
-### 1. Build and Run all Services in Containers
+ 1. Build and Run all Services in Containers
 Execute the single-click build script:
 ```cmd
 build-docker.bat
@@ -105,24 +105,24 @@ Or run directly in terminal:
 docker compose up --build -d
 ```
 
-### 2. Verify Container Health
+ 2. Verify Container Health
 ```bash
 docker compose ps
 ```
 
-### 3. Access Applications
-- 🌐 **React Client App**: [http://localhost:3000](http://localhost:3000)
-- 📘 **Central Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- ⚡ **API Gateway Health**: [http://localhost:8080/](http://localhost:8080/)
+ 3. Access Applications
+- 🌐 React Client App: [http://localhost:3000](http://localhost:3000)
+- 📘 Central Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- ⚡ API Gateway Health: [http://localhost:8080/](http://localhost:8080/)
 
 ---
 
-## 💻 Running Locally (Without Docker)
+💻 Running Locally (Without Docker)
 
-### 1. Start MongoDB
+ 1. Start MongoDB
 Ensure MongoDB is running on port `27017` or configured via `SPRING_DATA_MONGODB_URI`.
 
-### 2. Launch Services
+2. Launch Services
 Execute the local runner script:
 ```cmd
 run-local.bat
@@ -140,36 +140,36 @@ cd frontend && npm run dev
 
 ---
 
-## 🧪 Testing with cURL / Postman
+ 🧪 Testing with cURL / Postman
 
-### 1. Test Client-to-Gateway Secret Key Security
-**Without Secret Key (Should return 401 Unauthorized):**
+ 1. Test Client-to-Gateway Secret Key Security
+Without Secret Key (Should return 401 Unauthorized):
 ```bash
 curl -i -X GET http://localhost:8080/movies
 ```
 
-**With Valid Secret Key (Should return 200 OK):**
+With Valid Secret Key (Should return 200 OK):
 ```bash
 curl -i -X GET http://localhost:8080/movies \
   -H "X-Client-Secret: CinemaClientSecret2026!"
 ```
 
-### 2. User Registration & Login
+ 2. User Registration & Login
 ```bash
-# Register
+Register
 curl -X POST http://localhost:8080/auth/register \
   -H "Content-Type: application/json" \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
   -d '{"name":"John Doe","email":"john@example.com","password":"password123","role":"ROLE_USER"}'
 
-# Login
+ Login
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
   -d '{"email":"john@example.com","password":"password123"}'
 ```
 
-### 3. Create Ticket Booking & Process Payment
+ 3. Create Ticket Booking & Process Payment
 ```bash
 curl -X POST http://localhost:8080/bookings \
   -H "Content-Type: application/json" \
@@ -188,7 +188,7 @@ curl -X POST http://localhost:8080/bookings \
   }'
 ```
 
-### 4. Download PDF Billing Invoice
+ 4. Download PDF Billing Invoice
 ```bash
 curl -X GET http://localhost:8080/payments/bill/{paymentId} \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
