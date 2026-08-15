@@ -136,97 +136,127 @@ Use the **Select a definition** dropdown in the top-right corner to switch betwe
 | 1. Central API Gateway | Gateway Routes & Proxy | `http://localhost:8080/swagger-ui.html` |
 | 2. Auth Service (Port 8081) | User Registration, Login, JWT |
 
- 👥 Microservices Work Division Matrix
+## 👥 Microservices Work Division Matrix
+
+This project was built as a team effort, with each member owning a dedicated microservice — including its API layer, business logic, and database.
 
 | Student / Module | Microservice API | Port | MongoDB Database | Key Endpoints |
-| :--- | :--- | :--- | :--- | :--- |
-| Student 1 | `auth-service` | 8081 | `auth_db.users` | `POST /auth/register`<br>`POST /auth/login`<br>`POST /auth/change-password`<br>`GET /auth/profile/{email}`<br>`GET /auth/users`<br>`POST /auth/validate` |
-| Student 2 | `movie-service` | 8082 | `movie_db.movies` | `GET /movies`<br>`GET /movies/{id}`<br>`POST /movies`<br>`PUT /movies/{id}`<br>`DELETE /movies/{id}`<br>`GET /movies/coming-soon`<br>`GET /movies/offers` |
-| Student| `booking-service` | 8083 | `booking_db.bookings` | `GET /bookings`<br>`GET /bookings/{id}`<br>`GET /bookings/user/{email}`<br>`POST /bookings`<br>`PUT /bookings/{id}/status`<br>`DELETE /bookings/{id}` |
-| Student 4| `notification-service` | 8084 | `notification_db.notifications` | `GET /notifications`<br>`GET /notifications/user/{email}`<br>`POST /notifications/send`<br>`PUT /notifications/{id}/read`<br>`DELETE /notifications/{id}` |
-| Student 5 / Extra | `payment-service` | 8085 | `payment_db.payments` | `POST /payments/process`<br>`GET /payments`<br>`GET /payments/user/{email}`<br>`GET /payments/bill/{id}` (PDF Receipt)<br>`DELETE /payments/{id}` |
+| :--- | :--- | :---: | :--- | :--- |
+| ITBNM-2313-0039 | `auth-service` | 8081 | `auth_db.users` | `POST /auth/register`<br>`POST /auth/login`<br>`POST /auth/change-password`<br>`GET /auth/profile/{email}`<br>`GET /auth/users`<br>`POST /auth/validate` |
+| ITBNM-2313-0027 | `movie-service` | 8082 | `movie_db.movies` | `GET /movies`<br>`GET /movies/{id}`<br>`POST /movies`<br>`PUT /movies/{id}`<br>`DELETE /movies/{id}`<br>`GET /movies/coming-soon`<br>`GET /movies/offers` |
+| ITBNM-2313-0007 | `booking-service` | 8083 | `booking_db.bookings` | `GET /bookings`<br>`GET /bookings/{id}`<br>`GET /bookings/user/{email}`<br>`POST /bookings`<br>`PUT /bookings/{id}/status`<br>`DELETE /bookings/{id}` |
+| ITBNM-2313-0049 | `notification-service` | 8084 | `notification_db.notifications` | `GET /notifications`<br>`GET /notifications/user/{email}`<br>`POST /notifications/send`<br>`PUT /notifications/{id}/read`<br>`DELETE /notifications/{id}` |
+| ITBNM-2313-0021 / Extra | `payment-service` | 8085 | `payment_db.payments` | `POST /payments/process`<br>`GET /payments`<br>`GET /payments/user/{email}`<br>`GET /payments/bill/{id}` (PDF Receipt)<br>`DELETE /payments/{id}` |
 | Orchestration | `api-gateway` | 8080 | — | Central reverse proxy, Client Secret validation, JWT authentication, Rate Limiting, Swagger Aggregation |
-| Frontend| React Client App | 3000 | — | Modern React + Tailwind CSS client with automatic `X-Client-Secret` injection |
-
+| Frontend | React Client App | 3000 | — | Modern React + Tailwind CSS client with automatic `X-Client-Secret` injection |
 ---
 
- 🚀 Running with Docker Compose (Recommended)
+## 🚀 Running with Docker Compose (Recommended)
 
- 1. Build and Run all Services in Containers
+### 1️⃣ Build and Run all Services in Containers
+
 Execute the single-click build script:
+
 ```cmd
 build-docker.bat
 ```
+
 Or run directly in terminal:
+
 ```bash
 docker compose up --build -d
 ```
 
- 2. Verify Container Health
+### 2️⃣ Verify Container Health
+
 ```bash
 docker compose ps
 ```
 
- 3. Access Applications
-- 🌐 React Client App: [http://localhost:3000](http://localhost:3000)
-- 📘 Central Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- ⚡ API Gateway Health: [http://localhost:8080/](http://localhost:8080/)
+### 3️⃣ Access Applications
 
----
+| Service | URL |
+|---|---|
+| 🌐 React Client App | [http://localhost:3000](http://localhost:3000) |
+| 📘 Central Swagger UI | [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) |
+| ⚡ API Gateway Health | [http://localhost:8080/](http://localhost:8080/) |
 
-💻 Running Locally (Without Docker)
+## 💻 Running Locally (Without Docker)
 
- 1. Start MongoDB
-Ensure MongoDB is running on port `27017` or configured via `SPRING_DATA_MONGODB_URI`.
+### 1️⃣ Start MongoDB
+Ensure MongoDB is running on port `27017`, or configure the connection via the `SPRING_DATA_MONGODB_URI` environment variable.
 
-2. Launch Services
-Execute the local runner script:
+### 2️⃣ Launch Services
+
+**Option A — Run everything with the local runner script:**
 ```cmd
 run-local.bat
 ```
-Or start each service manually:
+
+**Option B — Start each service manually (in separate terminals):**
+
 ```bash
 cd auth-service && mvn spring-boot:run
+```
+```bash
 cd movie-service && mvn spring-boot:run
+```
+```bash
 cd booking-service && mvn spring-boot:run
+```
+```bash
 cd notification-service && mvn spring-boot:run
+```
+```bash
 cd payment-service && mvn spring-boot:run
+```
+```bash
 cd api-gateway && mvn spring-boot:run
+```
+```bash
 cd frontend && npm run dev
 ```
 
----
+> 💡 **Tip:** Run each command in its own terminal window/tab, since every service needs to stay running simultaneously.
+```
 
- 🧪 Testing with cURL / Postman
 
- 1. Test Client-to-Gateway Secret Key Security
-Without Secret Key (Should return 401 Unauthorized):
+
+ ## 🧪 Testing with cURL / Postman
+
+### 1️⃣ Test Client-to-Gateway Secret Key Security
+
+**Without Secret Key** (Should return `401 Unauthorized`):
 ```bash
 curl -i -X GET http://localhost:8080/movies
 ```
 
-With Valid Secret Key (Should return 200 OK):
+**With Valid Secret Key** (Should return `200 OK`):
 ```bash
 curl -i -X GET http://localhost:8080/movies \
   -H "X-Client-Secret: CinemaClientSecret2026!"
 ```
 
- 2. User Registration & Login
+### 2️⃣ User Registration & Login
+
+**Register:**
 ```bash
-Register
 curl -X POST http://localhost:8080/auth/register \
   -H "Content-Type: application/json" \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
   -d '{"name":"John Doe","email":"john@example.com","password":"password123","role":"ROLE_USER"}'
+```
 
- Login
+**Login:**
+```bash
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
   -d '{"email":"john@example.com","password":"password123"}'
 ```
 
- 3. Create Ticket Booking & Process Payment
+### 3️⃣ Create Ticket Booking & Process Payment
+
 ```bash
 curl -X POST http://localhost:8080/bookings \
   -H "Content-Type: application/json" \
@@ -245,7 +275,8 @@ curl -X POST http://localhost:8080/bookings \
   }'
 ```
 
- 4. Download PDF Billing Invoice
+### 4️⃣ Download PDF Billing Invoice
+
 ```bash
 curl -X GET http://localhost:8080/payments/bill/{paymentId} \
   -H "X-Client-Secret: CinemaClientSecret2026!" \
